@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Course Detail | Brightlane</title>
+    <title>Course Detail | Learnify</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -17,26 +17,29 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <header class="site-header">
-      <div class="logo">Brightlane</div>
+            <header class="site-header">
+      <a class="logo" href="index.html">Learnify</a>
       <nav class="nav-links">
         <a href="courses.html">Courses</a>
+        <a href="categories.html">Categories</a>
         <a href="roadmap.html">Roadmap</a>
         <a href="stories.html">Stories</a>
         <a href="about.html">About</a>
         <a href="instructors.html">Instructors</a>
-        <a href="portal.html">Portal</a>
+        <a href="my-courses.html">My Courses</a>
+        <a href="profile.html">Profile</a>
       </nav>
-      <a class="ghost-button" href="courses.html">Back to courses</a>
+      <div class="auth-links">
+        <a class="ghost-button" id="login-link" href="login.html">Login</a>
+        <a class="primary-button" id="register-link" href="register.html">Register</a>
+        <button class="secondary-button hidden" id="logout-link" type="button">Logout</button>
+      </div>
     </header>
 
     <main>
       <section class="page-hero" data-reveal>
         <h1 id="course-title">Course Title</h1>
-        <p id="course-summary">
-          Course summary goes here. This page is loaded dynamically from the
-          public catalog API.
-        </p>
+        <p id="course-summary">Course summary goes here.</p>
       </section>
 
       <section class="section course-detail" data-reveal>
@@ -49,25 +52,34 @@
         </div>
         <div class="detail-info">
           <div class="card-meta" id="course-meta">
-            <span><i class="ri-star-fill"></i> 4.8</span>
+            <span><i class="ri-star-fill"></i> <span id="course-rating">0</span></span>
             <span id="course-level">Beginner</span>
             <span id="course-duration">4 weeks</span>
-            <span class="price-tag" id="course-price">$59</span>
+            <span class="price-tag" id="course-price">$0</span>
           </div>
-          <h3>What you'll learn</h3>
-          <ul class="detail-list">
-            <li>Build production-ready APIs</li>
-            <li>Secure endpoints with JWT</li>
-            <li>Deploy to cloud infrastructure</li>
-          </ul>
-          <a class="primary-button" href="portal.html">Enroll via portal</a>
+          <p class="helper-text" id="course-instructor">Instructor: TBD</p>
+          <h3>Learning outcomes</h3>
+          <div class="outcome-grid" id="course-outcomes"></div>
+          <h3>Curriculum</h3>
+          <div class="accordion" id="course-curriculum"></div>
+          <div class="detail-actions">
+            <button class="primary-button" id="enroll-btn" type="button">Enroll now</button>
+            <a class="secondary-button hidden" id="start-btn" href="learning.html">Start learning</a>
+          </div>
         </div>
+      </section>
+
+      <section class="section" data-reveal>
+        <div class="section-header">
+          <h2>Reviews</h2>
+        </div>
+        <div id="course-reviews" class="testimonial-grid"></div>
       </section>
     </main>
 
     <footer class="site-footer">
       <div>
-        <div class="logo">Brightlane</div>
+        <div class="logo">Learnify</div>
         <p>Learning experiences that move careers forward.</p>
         <div class="footer-icons">
           <a href="https://www.facebook.com" aria-label="Facebook">
@@ -83,20 +95,20 @@
       </div>
       <div class="footer-links">
         <a href="courses.html">Courses</a>
+        <a href="categories.html">Categories</a>
         <a href="roadmap.html">Roadmap</a>
         <a href="stories.html">Stories</a>
         <a href="about.html">About</a>
         <a href="instructors.html">Instructors</a>
-        <a href="portal.html">Portal</a>
       </div>
       <div class="footer-links">
-        <span><i class="ri-mail-line"></i> hello@brightlane.com</span>
+        <span><i class="ri-mail-line"></i> hello@learnify.com</span>
         <span><i class="ri-phone-line"></i> 1-800-555-0199</span>
         <span><i class="ri-map-pin-2-line"></i> Uly Dala 63, Astana</span>
       </div>
       <div class="footer-map">
         <iframe
-          title="Brightlane office location"
+          title="Learnify office location"
           src="https://www.openstreetmap.org/export/embed.html?bbox=71.3976%2C51.1124%2C71.4276%2C51.1324&layer=mapnik&marker=51.1224%2C71.4126"
           loading="lazy"
           referrerpolicy="no-referrer-when-downgrade"
@@ -107,3 +119,5 @@
     <script src="script.js"></script>
   </body>
 </html>
+
+

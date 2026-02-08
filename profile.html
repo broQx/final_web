@@ -1,0 +1,87 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Profile | Learnify</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Space+Grotesk:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+        <header class="site-header">
+      <a class="logo" href="index.html">Learnify</a>
+      <nav class="nav-links">
+        <a href="courses.html">Courses</a>
+        <a href="categories.html">Categories</a>
+        <a href="roadmap.html">Roadmap</a>
+        <a href="stories.html">Stories</a>
+        <a href="about.html">About</a>
+        <a href="instructors.html">Instructors</a>
+        <a href="my-courses.html">My Courses</a>
+        <a href="profile.html">Profile</a>
+      </nav>
+      <div class="auth-links">
+        <a class="ghost-button" id="login-link" href="login.html">Login</a>
+        <a class="primary-button" id="register-link" href="register.html">Register</a>
+        <button class="secondary-button hidden" id="logout-link" type="button">Logout</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="page-hero" data-reveal>
+        <h1>My profile</h1>
+        <p id="profile-message" class="helper-text"></p>
+      </section>
+      <section class="section" data-reveal>
+        <div class="page-panel">
+          <h3>Account</h3>
+          <p><strong>Name:</strong> <span id="profile-name">-</span></p>
+          <p><strong>Email:</strong> <span id="profile-email">-</span></p>
+          <p class="helper-text">Keep your profile up to date to unlock personalized paths.</p>
+        </div>
+        <div class="page-panel">
+          <h3>Learning stats</h3>
+          <div class="stats-grid">
+            <div class="stat-card">
+              <strong id="stats-total">0</strong>
+              <span>Total courses</span>
+            </div>
+            <div class="stat-card">
+              <strong id="stats-completed">0</strong>
+              <span>Completed</span>
+            </div>
+            <div class="stat-card">
+              <strong id="stats-progress">0%</strong>
+              <span>Avg progress</span>
+            </div>
+          </div>
+          <div class="progress-row">
+            <div class="progress-bar">
+              <span id="profile-progress-bar" style="width: 0%"></span>
+            </div>
+            <span class="progress-label" id="profile-progress-label">0% profile strength</span>
+          </div>
+        </div>
+        <div class="page-panel">
+          <h3>My enrollments</h3>
+          <div id="enrollments-list" class="course-list"></div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div>
+        <div class="logo">Learnify</div>
+        <p>Learning experiences that move careers forward.</p>
+      </div>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
+

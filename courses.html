@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Courses | Brightlane</title>
+    <title>Courses | Learnify</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -17,82 +17,162 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <header class="site-header">
-      <div class="logo">Brightlane</div>
+            <header class="site-header">
+      <a class="logo" href="index.html">Learnify</a>
       <nav class="nav-links">
         <a href="courses.html">Courses</a>
+        <a href="categories.html">Categories</a>
         <a href="roadmap.html">Roadmap</a>
         <a href="stories.html">Stories</a>
         <a href="about.html">About</a>
         <a href="instructors.html">Instructors</a>
-        <a href="portal.html">Portal</a>
+        <a href="my-courses.html">My Courses</a>
+        <a href="profile.html">Profile</a>
       </nav>
-      <a class="ghost-button" href="index.html">Back Home</a>
+      <div class="auth-links">
+        <a class="ghost-button" id="login-link" href="login.html">Login</a>
+        <a class="primary-button" id="register-link" href="register.html">Register</a>
+        <button class="secondary-button hidden" id="logout-link" type="button">Logout</button>
+      </div>
     </header>
 
     <main>
       <section class="page-hero" data-reveal>
         <h1>Courses</h1>
-        <p>
-          Explore a catalog inspired by Coursera-style experiences. Each course
-          includes projects, mentor feedback, and certificates.
-        </p>
-      </section>
-
-      <section class="section" data-reveal>
-        <div class="filter-bar">
-          <div class="filter-input">
-            <input id="catalog-search" type="text" placeholder="Search courses" />
-            <button class="primary-button" type="button" id="catalog-apply">Search</button>
-          </div>
-          <select id="catalog-category">
-            <option value="all">Category: All</option>
-            <option value="Product">Product</option>
-            <option value="Design">Design</option>
-            <option value="Data">Data</option>
-            <option value="Engineering">Engineering</option>
-            <option value="Marketing">Marketing</option>
-          </select>
-          <select id="catalog-level">
-            <option value="all">Level: Any</option>
-            <option value="beginner">Beginner</option>
-            <option value="intermediate">Intermediate</option>
-            <option value="advanced">Advanced</option>
-          </select>
-          <select id="catalog-sort">
-            <option value="recent">Sort: Recent</option>
-            <option value="duration">Sort: Duration</option>
-            <option value="price">Sort: Price</option>
-          </select>
-          <div class="filter-chips">
-            <span class="chip">Most popular</span>
-            <span class="chip">Certificate</span>
-            <span class="chip">Live cohort</span>
-            <span class="chip">Under 6 weeks</span>
-          </div>
-        </div>
+        <p>Search and filter the live catalog from your backend.</p>
       </section>
 
       <section class="section" data-reveal>
         <div class="section-header">
-          <h2>Catalog results</h2>
-          <p>Search and filter the live catalog from your backend.</p>
+          <h2>Featured courses</h2>
+          <p>Popular courses highlighted before you search.</p>
         </div>
-        <div id="catalog-list" class="card-grid"></div>
-        <div class="pagination">
-          <button class="secondary-button" id="catalog-prev">Previous</button>
-          <span id="catalog-page" class="helper-text">Page 1</span>
-          <button class="secondary-button" id="catalog-next">Next</button>
+        <div class="card-grid">
+          <article class="course-card">
+            <img
+              src="https://images.pexels.com/photos/1181675/pexels-photo-1181675.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
+              alt="Developer working"
+            />
+            <span class="tag">Engineering</span>
+            <h3>Go Developer Roadmap</h3>
+            <p>Build APIs, CLI tools, and cloud services with Go.</p>
+            <div class="card-meta">8 weeks - $89</div>
+            <div class="card-actions">
+              <a class="secondary-button" href="course-detail.html?title=Go%20Developer%20Roadmap">View</a>
+              <button class="ghost-button quick-view-btn" type="button" data-title="Go Developer Roadmap">Quick view</button>
+            </div>
+          </article>
+          <article class="course-card">
+            <img
+              src="https://images.pexels.com/photos/3769021/pexels-photo-3769021.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
+              alt="Student taking notes"
+            />
+            <span class="tag">Product</span>
+            <h3>Product Strategy Lab</h3>
+            <p>Validate ideas, map GTM, and launch confidently.</p>
+            <div class="card-meta">5 weeks - $69</div>
+            <div class="card-actions">
+              <a class="secondary-button" href="course-detail.html?title=Product%20Strategy%20Lab">View</a>
+              <button class="ghost-button quick-view-btn" type="button" data-title="Product Strategy Lab">Quick view</button>
+            </div>
+          </article>
+          <article class="course-card">
+            <img
+              src="https://images.pexels.com/photos/4143795/pexels-photo-4143795.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
+              alt="Designer working"
+            />
+            <span class="tag">Design</span>
+            <h3>Design Systems Sprint</h3>
+            <p>Ship a scalable UI kit and align teams fast.</p>
+            <div class="card-meta">6 weeks - $72</div>
+            <div class="card-actions">
+              <a class="secondary-button" href="course-detail.html?title=Design%20Systems%20Sprint">View</a>
+              <button class="ghost-button quick-view-btn" type="button" data-title="Design Systems Sprint">Quick view</button>
+            </div>
+          </article>
         </div>
-        <p class="helper-text">
-          If the catalog is empty, run your backend and seed data, then refresh.
-        </p>
+      </section>
+      <section class="section" data-reveal>
+        <div class="catalog-layout">
+          <aside class="catalog-filters">
+            <h3>Filter courses</h3>
+            <div class="filter-input">
+              <input id="catalog-search" type="text" placeholder="Search courses" autocomplete="off" />
+              <div id="catalog-autocomplete" class="autocomplete-list"></div>
+            </div>
+
+            <div class="filter-group">
+              <h4>Category</h4>
+              <label><input type="checkbox" class="filter-category" value="Engineering" /> Engineering</label>
+              <label><input type="checkbox" class="filter-category" value="Product" /> Product</label>
+              <label><input type="checkbox" class="filter-category" value="Design" /> Design</label>
+              <label><input type="checkbox" class="filter-category" value="Data" /> Data</label>
+              <label><input type="checkbox" class="filter-category" value="Marketing" /> Marketing</label>
+            </div>
+
+            <div class="filter-group">
+              <h4>Level</h4>
+              <label><input type="checkbox" class="filter-level" value="beginner" /> Beginner</label>
+              <label><input type="checkbox" class="filter-level" value="intermediate" /> Intermediate</label>
+              <label><input type="checkbox" class="filter-level" value="advanced" /> Advanced</label>
+            </div>
+
+            <div class="filter-group">
+              <h4>Price range</h4>
+              <div class="filter-range">
+                <input id="filter-min-price" type="number" min="0" placeholder="Min" />
+                <input id="filter-max-price" type="number" min="0" placeholder="Max" />
+              </div>
+            </div>
+
+            <div class="filter-group">
+              <h4>Rating</h4>
+              <select id="filter-rating">
+                <option value="0">All ratings</option>
+                <option value="4.8">4.8 and up</option>
+                <option value="4.5">4.5 and up</option>
+                <option value="4">4.0 and up</option>
+              </select>
+            </div>
+
+            <div class="filter-group">
+              <h4>Sort</h4>
+              <select id="catalog-sort">
+                <option value="recent">Newest</option>
+                <option value="duration">Shortest</option>
+                <option value="price">Lowest price</option>
+              </select>
+            </div>
+
+            <div class="filter-actions">
+              <button class="primary-button" type="button" id="catalog-apply">Apply filters</button>
+              <button class="ghost-button" type="button" id="catalog-clear">Clear</button>
+            </div>
+          </aside>
+
+          <div class="catalog-results">
+            <div class="section-header">
+              <h2>Catalog results</h2>
+              <div class="helper-row">
+                <p id="catalog-status" class="helper-text"></p>
+                <span id="catalog-count" class="helper-text"></span>
+              </div>
+              <div id="active-filters" class="filter-chips"></div>
+            </div>
+            <div id="catalog-list" class="card-grid"></div>
+            <div class="pagination">
+              <button class="secondary-button" id="catalog-prev">Previous</button>
+              <span id="catalog-page" class="helper-text">Page 1</span>
+              <button class="secondary-button" id="catalog-next">Next</button>
+            </div>
+          </div>
+        </div>
       </section>
     </main>
 
     <footer class="site-footer">
       <div>
-        <div class="logo">Brightlane</div>
+        <div class="logo">Learnify</div>
         <p>Learning experiences that move careers forward.</p>
         <div class="footer-icons">
           <a href="https://www.facebook.com" aria-label="Facebook">
@@ -108,20 +188,20 @@
       </div>
       <div class="footer-links">
         <a href="courses.html">Courses</a>
+        <a href="categories.html">Categories</a>
         <a href="roadmap.html">Roadmap</a>
         <a href="stories.html">Stories</a>
         <a href="about.html">About</a>
         <a href="instructors.html">Instructors</a>
-        <a href="portal.html">Portal</a>
       </div>
       <div class="footer-links">
-        <span><i class="ri-mail-line"></i> hello@brightlane.com</span>
+        <span><i class="ri-mail-line"></i> hello@learnify.com</span>
         <span><i class="ri-phone-line"></i> 1-800-555-0199</span>
         <span><i class="ri-map-pin-2-line"></i> Uly Dala 63, Astana</span>
       </div>
       <div class="footer-map">
         <iframe
-          title="Brightlane office location"
+          title="Learnify office location"
           src="https://www.openstreetmap.org/export/embed.html?bbox=71.3976%2C51.1124%2C71.4276%2C51.1324&layer=mapnik&marker=51.1224%2C71.4126"
           loading="lazy"
           referrerpolicy="no-referrer-when-downgrade"
@@ -129,6 +209,17 @@
       </div>
     </footer>
 
+    <div class="modal" id="quick-view-modal" aria-hidden="true">
+      <div class="modal-content">
+        <button class="modal-close" type="button" aria-label="Close">&times;</button>
+        <div id="quick-view-body"></div>
+      </div>
+    </div>
+
     <script src="script.js"></script>
   </body>
 </html>
+
+
+
+

@@ -1,5 +1,14 @@
 const mongoose = require("mongoose");
 
+const reviewSchema = new mongoose.Schema(
+  {
+    name: { type: String, trim: true },
+    rating: { type: Number, min: 1, max: 5 },
+    comment: { type: String, trim: true, maxlength: 500 },
+  },
+  { _id: false }
+);
+
 const courseSchema = new mongoose.Schema(
   {
     title: {
@@ -38,6 +47,30 @@ const courseSchema = new mongoose.Schema(
     imageUrl: {
       type: String,
       trim: true,
+    },
+    instructorName: {
+      type: String,
+      trim: true,
+      maxlength: 80,
+    },
+    rating: {
+      type: Number,
+      min: 0,
+      max: 5,
+      default: 0,
+    },
+    reviewCount: {
+      type: Number,
+      min: 0,
+      default: 0,
+    },
+    outcomes: [{ type: String, trim: true, maxlength: 120 }],
+    syllabus: [{ type: String, trim: true, maxlength: 200 }],
+    reviews: [reviewSchema],
+    videoQuery: {
+      type: String,
+      trim: true,
+      maxlength: 120,
     },
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,

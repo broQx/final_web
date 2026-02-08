@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Stories | Learnify</title>
+    <title>Learning | Learnify</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -17,7 +17,7 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-                <header class="site-header">
+            <header class="site-header">
       <a class="logo" href="index.html">Learnify</a>
       <nav class="nav-links">
         <a href="courses.html">Courses</a>
@@ -38,60 +38,18 @@
 
     <main>
       <section class="page-hero" data-reveal>
-        <h1>Stories</h1>
-        <p>
-          Real testimonials from learners who finished our roadmap and landed
-          their next role faster.
-        </p>
+        <h1 id="learning-title">Learning</h1>
+        <p>Start your lessons and watch curated videos.</p>
       </section>
       <section class="section" data-reveal>
-        <div class="testimonial-grid">
-          <article class="testimonial-card">
-            <img
-              src="https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
-              alt="Student portrait"
-              class="avatar"
-            />
-            <div>
-              <p>
-                The roadmap kept me focused. I shipped two Go services and got
-                hired within a month.
-              </p>
-              <strong>Selena Grant</strong>
-              <span>Backend Developer</span>
-            </div>
-          </article>
-          <article class="testimonial-card">
-            <img
-              src="https://images.pexels.com/photos/614810/pexels-photo-614810.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
-              alt="Student portrait"
-              class="avatar"
-            />
-            <div>
-              <p>
-                The instructors were active every week and the capstone demo
-                day landed me interviews.
-              </p>
-              <strong>Hassan Nur</strong>
-              <span>API Engineer</span>
-            </div>
-          </article>
-          <article class="testimonial-card">
-            <img
-              src="https://images.pexels.com/photos/733872/pexels-photo-733872.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
-              alt="Student portrait"
-              class="avatar"
-            />
-            <div>
-              <p>
-                I went from zero to deploying my first service thanks to the
-                roadmap and weekly feedback.
-              </p>
-              <strong>Priya Sharma</strong>
-              <span>Cloud Developer</span>
-            </div>
-          </article>
+        <div class="page-panel learning-banner" id="learning-banner">
+          <strong>Continue where you left off</strong>
+          <p class="helper-text" id="learning-progress-text">Start your first lesson to build momentum.</p>
         </div>
+        <div class="lesson-list" id="lesson-list"></div>
+      </section>
+      <section class="section" data-reveal>
+        <div id="learning-videos" class="video-grid"></div>
       </section>
     </main>
 
@@ -113,13 +71,14 @@
       </div>
       <div class="footer-links">
         <a href="courses.html">Courses</a>
+        <a href="categories.html">Categories</a>
         <a href="roadmap.html">Roadmap</a>
         <a href="stories.html">Stories</a>
         <a href="about.html">About</a>
         <a href="instructors.html">Instructors</a>
       </div>
       <div class="footer-links">
-        <span><i class="ri-mail-line"></i> hello@Learnify.com</span>
+        <span><i class="ri-mail-line"></i> hello@learnify.com</span>
         <span><i class="ri-phone-line"></i> 1-800-555-0199</span>
         <span><i class="ri-map-pin-2-line"></i> Uly Dala 63, Astana</span>
       </div>
@@ -136,13 +95,5 @@
     <script src="script.js"></script>
   </body>
 </html>
-
-
-
-
-
-
-
-
 
 
