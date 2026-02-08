@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Checkout | Learnify</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Space+Grotesk:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@4.8.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="logo" href="index.html">Learnify</a>
+      <nav class="nav-links">
+        <a href="courses.html">Courses</a>
+        <a href="categories.html">Categories</a>
+        <a href="roadmap.html">Roadmap</a>
+        <a href="stories.html">Stories</a>
+        <a href="about.html">About</a>
+        <a href="instructors.html">Instructors</a>
+        <a href="my-courses.html">My Courses</a>
+        <a href="profile.html">Profile</a>
+        <a href="admin.html">Admin</a>
+      </nav>
+      <div class="auth-links">
+        <a class="ghost-button" id="login-link" href="login.html">Login</a>
+        <a class="primary-button" id="register-link" href="register.html">Register</a>
+        <button class="secondary-button hidden" id="logout-link" type="button">Logout</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="page-hero" data-reveal>
+        <h1>Checkout</h1>
+        <p>Review your order and complete enrollment.</p>
+        <p id="checkout-message" class="helper-text"></p>
+      </section>
+
+      <section class="section" data-reveal>
+        <div class="checkout-layout">
+          <div class="summary-card">
+            <h3>Order summary</h3>
+            <div class="summary-course">
+              <img
+                id="checkout-image"
+                src="https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
+                alt="Course cover"
+              />
+              <div>
+                <strong id="checkout-title">Course title</strong>
+                <p class="helper-text">Includes full access, projects, and community support.</p>
+              </div>
+            </div>
+            <div class="order-list">
+              <div class="summary-row">
+                <span>Course fee</span>
+                <span id="checkout-price">$0</span>
+              </div>
+              <div class="summary-row">
+                <span>Platform fee</span>
+                <span id="checkout-fee">$0</span>
+              </div>
+              <div class="summary-row">
+                <span>Discount</span>
+                <span id="checkout-discount">$0</span>
+              </div>
+              <div class="summary-row total">
+                <strong>Total</strong>
+                <strong id="checkout-total">$0</strong>
+              </div>
+            </div>
+          </div>
+
+          <div class="summary-card">
+            <h3>Payment details</h3>
+            <form id="checkout-form" class="form-grid">
+              <input type="text" name="fullName" placeholder="Full name" required />
+              <input type="email" name="email" placeholder="Email" required />
+              <input type="text" name="cardNumber" placeholder="Card number" required />
+              <input type="text" name="expiry" placeholder="MM/YY" required />
+              <input type="text" name="cvc" placeholder="CVC" required />
+              <input type="text" name="coupon" placeholder="Coupon code (optional)" />
+              <button class="primary-button" id="checkout-submit" type="submit">Complete purchase</button>
+            </form>
+            <p class="helper-text">Secure checkout. Powered by Learnify payments.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div>
+        <div class="logo">Learnify</div>
+        <p>Learning experiences that move careers forward.</p>
+      </div>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>

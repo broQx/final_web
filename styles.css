@@ -709,6 +709,25 @@ a {
   font-size: 0.85rem;
 }
 
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.badge-success {
+  background: #d6f2e6;
+  color: #0b6b4b;
+}
+
+.badge-neutral {
+  background: #f6e2d2;
+  color: #7a4d2a;
+}
+
 .story-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -728,6 +747,88 @@ a {
   flex-direction: column;
   color: var(--muted);
   font-size: 0.9rem;
+}
+
+.checkout-layout {
+  display: grid;
+  gap: 24px;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.summary-card {
+  background: var(--white);
+  padding: 24px;
+  border-radius: 20px;
+  box-shadow: var(--shadow);
+  display: grid;
+  gap: 16px;
+}
+
+.summary-course {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 16px;
+  align-items: center;
+}
+
+.summary-course img {
+  width: 100%;
+  border-radius: 16px;
+  object-fit: cover;
+}
+
+.order-list {
+  display: grid;
+  gap: 10px;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  color: var(--muted);
+}
+
+.summary-row.total {
+  font-size: 1.1rem;
+  color: var(--ink);
+}
+
+.certificate-card {
+  background: #fff7ec;
+  border: 2px solid #ead7c2;
+  padding: 40px;
+  border-radius: 24px;
+  text-align: center;
+  box-shadow: var(--shadow);
+  display: grid;
+  gap: 12px;
+}
+
+.certificate-card h2 {
+  font-size: 2rem;
+}
+
+.certificate-card h3 {
+  font-size: 1.4rem;
+}
+
+.certificate-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.admin-grid {
+  display: grid;
+  gap: 24px;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.admin-form {
+  display: grid;
+  gap: 12px;
 }
 
 .testimonial-grid {
@@ -1107,6 +1208,23 @@ a {
 
   .hero-actions {
     flex-direction: column;
+  }
+}
+
+@media print {
+  .site-header,
+  .site-footer,
+  .certificate-actions {
+    display: none;
+  }
+
+  body {
+    background: white;
+  }
+
+  .certificate-card {
+    box-shadow: none;
+    border-color: #333;
   }
 }
 

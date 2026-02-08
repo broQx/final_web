@@ -129,6 +129,7 @@ const profileMessage = document.querySelector("#profile-message");
 const enrollmentsList = document.querySelector("#enrollments-list");
 const myCoursesList = document.querySelector("#my-courses-list");
 const myCoursesMessage = document.querySelector("#my-courses-message");
+const certificateList = document.querySelector("#certificate-list");
 const statsTotal = document.querySelector("#stats-total");
 const statsCompleted = document.querySelector("#stats-completed");
 const statsProgress = document.querySelector("#stats-progress");
@@ -208,6 +209,9 @@ const loadEnrollments = async () => {
       if (statsTotal) statsTotal.textContent = "0";
       if (statsCompleted) statsCompleted.textContent = "0";
       if (statsProgress) statsProgress.textContent = "0%";
+      if (certificateList) {
+        certificateList.innerHTML = "<p class=\"helper-text\">No certificates yet.</p>";
+      }
       return;
     }
     const total = data.length;
@@ -230,6 +234,26 @@ const loadEnrollments = async () => {
       `
       )
       .join("");
+
+    if (certificateList) {
+      const completedCourses = data.filter(
+        (enrollment) => enrollment.status === "completed" && enrollment.course
+      );
+      if (!completedCourses.length) {
+        certificateList.innerHTML = "<p class=\"helper-text\">No certificates yet.</p>";
+      } else {
+        certificateList.innerHTML = completedCourses
+          .map(
+            (enrollment) => `
+            <div class="page-panel">
+              <strong>${enrollment.course.title}</strong>
+              <a class="secondary-button" href="certificate.html?id=${enrollment.course._id}">View certificate</a>
+            </div>
+          `
+          )
+          .join("");
+      }
+    }
   } catch (err) {
     enrollmentsList.textContent = "Network error loading enrollments.";
   }
@@ -271,6 +295,14 @@ const renderMyCourses = (enrollments) => {
           ? `Last watched: Lesson ${Math.max(...completedLessons) + 1}`
           : "Start your first lesson";
 
+      const isCompleted = enrollment.status === "completed" || progress >= 100;
+      const statusBadge = isCompleted
+        ? '<span class="badge badge-success">Completed</span>'
+        : '<span class="badge badge-neutral">In progress</span>';
+      const certificateLink = isCompleted && courseId
+        ? `<a class="secondary-button" href="certificate.html?id=${courseId}">Certificate</a>`
+        : "";
+
       return `
         <article class="course-progress-card">
           <div class="course-progress-media">
@@ -279,7 +311,10 @@ const renderMyCourses = (enrollments) => {
           </div>
           <div class="course-progress-body">
             <div class="course-progress-header">
-              <h3>${course.title || "Course"}</h3>
+              <div>
+                <h3>${course.title || "Course"}</h3>
+                ${statusBadge}
+              </div>
               <span class="price-tag">$${course.price || 0}</span>
             </div>
             <p>${description}</p>
@@ -309,6 +344,7 @@ const renderMyCourses = (enrollments) => {
             <div class="detail-actions">
               <a class="secondary-button" href="${detailLink}">View details</a>
               <a class="primary-button" href="${learningLink}">Continue learning</a>
+              ${certificateLink}
             </div>
           </div>
         </article>
@@ -457,6 +493,29 @@ const learningBanner = document.querySelector("#learning-banner");
 const sliderTrack = document.querySelector(".slider-track");
 const sliderPrev = document.querySelector(".slider-prev");
 const sliderNext = document.querySelector(".slider-next");
+
+const checkoutTitle = document.querySelector("#checkout-title");
+const checkoutPrice = document.querySelector("#checkout-price");
+const checkoutFee = document.querySelector("#checkout-fee");
+const checkoutDiscount = document.querySelector("#checkout-discount");
+const checkoutTotal = document.querySelector("#checkout-total");
+const checkoutImage = document.querySelector("#checkout-image");
+const checkoutForm = document.querySelector("#checkout-form");
+const checkoutMessage = document.querySelector("#checkout-message");
+const checkoutSubmit = document.querySelector("#checkout-submit");
+
+const certificateName = document.querySelector("#certificate-name");
+const certificateCourse = document.querySelector("#certificate-course");
+const certificateDate = document.querySelector("#certificate-date");
+const certificateMessage = document.querySelector("#certificate-message");
+const certificateDownload = document.querySelector("#certificate-download");
+const certificateCard = document.querySelector("#certificate-card");
+
+const adminMessage = document.querySelector("#admin-message");
+const adminCourseList = document.querySelector("#admin-course-list");
+const adminCourseForm = document.querySelector("#admin-course-form");
+const adminReset = document.querySelector("#admin-reset");
+const adminSubmit = document.querySelector("#admin-submit");
 
 let currentPage = 1;
 let totalPages = 1;
@@ -993,27 +1052,28 @@ const loadCourseDetail = async () => {
     renderReviews(data.reviews || []);
 
     if (enrollButton) {
-      enrollButton.addEventListener("click", async () => {
-        const token = getToken();
-        if (!token) {
-          window.location.href = "login.html";
-          return;
-        }
-        const enrollResponse = await fetch(`${API_BASE}/api/enrollments/enroll`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ courseId: resolvedCourseId }),
-        });
-        if (enrollResponse.ok) {
-          if (startButton) {
-            startButton.classList.remove("hidden");
-            startButton.href = `learning.html?id=${resolvedCourseId}`;
-          }
-        }
+      enrollButton.addEventListener("click", () => {
+        window.location.href = `checkout.html?id=${resolvedCourseId}`;
       });
+    }
+
+    const token = getToken();
+    if (token && startButton && resolvedCourseId) {
+      try {
+        const response = await fetch(`${API_BASE}/api/enrollments/me`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const enrollments = await response.json();
+        const match = Array.isArray(enrollments)
+          ? enrollments.find((item) => item.course && item.course._id === resolvedCourseId)
+          : null;
+        if (response.ok && match) {
+          startButton.classList.remove("hidden");
+          startButton.href = `learning.html?id=${resolvedCourseId}`;
+        }
+      } catch (err) {
+        return;
+      }
     }
   } catch (err) {
     return;
@@ -1178,6 +1238,314 @@ const loadLearning = async () => {
   }
 };
 
+const loadCheckout = async () => {
+  if (!checkoutTitle || !checkoutForm) return;
+  const params = new URLSearchParams(window.location.search);
+  const courseId = params.get("id");
+  const courseTitleParam = params.get("title");
+
+  if (!courseId && !courseTitleParam) {
+    if (checkoutMessage) {
+      checkoutMessage.textContent = "No course selected for checkout.";
+    }
+    return;
+  }
+
+  try {
+    let course = null;
+    if (courseId) {
+      const response = await fetch(`${API_BASE}/api/courses/public/${courseId}`);
+      course = await response.json();
+      if (!response.ok) {
+        course = null;
+      }
+    } else {
+      const response = await fetch(
+        `${API_BASE}/api/courses/public?q=${encodeURIComponent(courseTitleParam)}&limit=1`
+      );
+      const payload = await response.json();
+      course = Array.isArray(payload.data) ? payload.data[0] : null;
+    }
+
+    if (!course) {
+      if (checkoutMessage) {
+        checkoutMessage.textContent = "Unable to load course details.";
+      }
+      return;
+    }
+
+    checkoutTitle.textContent = course.title;
+    if (checkoutImage) {
+      checkoutImage.src = course.imageUrl || checkoutImage.src;
+    }
+    const price = Number(course.price) || 0;
+    const fee = Math.round(price * 0.05);
+    const discount = 0;
+    const total = price + fee - discount;
+
+    if (checkoutPrice) checkoutPrice.textContent = `$${price}`;
+    if (checkoutFee) checkoutFee.textContent = `$${fee}`;
+    if (checkoutDiscount) checkoutDiscount.textContent = `$${discount}`;
+    if (checkoutTotal) checkoutTotal.textContent = `$${total}`;
+
+    if (!getToken() && checkoutMessage) {
+      checkoutMessage.textContent = "Please log in to complete your purchase.";
+      if (checkoutSubmit) checkoutSubmit.disabled = true;
+    }
+
+    checkoutForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const token = getToken();
+      if (!token) {
+        window.location.href = "login.html";
+        return;
+      }
+      const selectedCourseId = course._id || courseId;
+      if (!selectedCourseId) return;
+
+      try {
+        const response = await fetch(`${API_BASE}/api/enrollments/enroll`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ courseId: selectedCourseId }),
+        });
+        if (!response.ok) {
+          if (checkoutMessage) {
+            checkoutMessage.textContent = "Payment failed. Please try again.";
+          }
+          return;
+        }
+        window.location.href = "my-courses.html";
+      } catch (err) {
+        if (checkoutMessage) {
+          checkoutMessage.textContent = "Network error during purchase.";
+        }
+      }
+    });
+  } catch (err) {
+    if (checkoutMessage) {
+      checkoutMessage.textContent = "Network error loading checkout.";
+    }
+  }
+};
+
+const loadCertificate = async () => {
+  if (!certificateName || !certificateCourse) return;
+  const params = new URLSearchParams(window.location.search);
+  const courseId = params.get("id");
+  if (!courseId) {
+    if (certificateMessage) {
+      certificateMessage.textContent = "No course selected for certificate.";
+    }
+    return;
+  }
+  const token = getToken();
+  if (!token) {
+    if (certificateMessage) {
+      certificateMessage.textContent = "Please log in to view your certificate.";
+    }
+    return;
+  }
+
+  try {
+    const [profileResponse, enrollmentResponse, courseResponse] = await Promise.all([
+      fetch(`${API_BASE}/api/users/profile`, {
+        headers: { Authorization: `Bearer ${token}` },
+      }),
+      fetch(`${API_BASE}/api/enrollments/me`, {
+        headers: { Authorization: `Bearer ${token}` },
+      }),
+      fetch(`${API_BASE}/api/courses/public/${courseId}`),
+    ]);
+
+    const profile = await profileResponse.json();
+    const enrollments = await enrollmentResponse.json();
+    const course = await courseResponse.json();
+
+    if (!profileResponse.ok || !courseResponse.ok || !enrollmentResponse.ok) {
+      if (certificateMessage) {
+        certificateMessage.textContent = "Unable to load certificate data.";
+      }
+      return;
+    }
+
+    const match = Array.isArray(enrollments)
+      ? enrollments.find((item) => item.course && item.course._id === courseId)
+      : null;
+
+    if (!match || match.status !== "completed") {
+      if (certificateMessage) {
+        certificateMessage.textContent =
+          "Complete the course to unlock your certificate.";
+      }
+      if (certificateCard) {
+        certificateCard.classList.add("hidden");
+      }
+      if (certificateDownload) {
+        certificateDownload.disabled = true;
+      }
+      return;
+    }
+
+    certificateName.textContent = profile.username || "Learner";
+    certificateCourse.textContent = course.title;
+    const date = new Date(match.updatedAt || match.createdAt || Date.now());
+    if (certificateDate) {
+      certificateDate.textContent = `Issued on ${date.toLocaleDateString()}`;
+    }
+  } catch (err) {
+    if (certificateMessage) {
+      certificateMessage.textContent = "Network error loading certificate.";
+    }
+  }
+};
+
+if (certificateDownload) {
+  certificateDownload.addEventListener("click", () => {
+    window.print();
+  });
+}
+
+const renderAdminCourses = (courses) => {
+  if (!adminCourseList) return;
+  if (!courses.length) {
+    adminCourseList.innerHTML = "<p class=\"helper-text\">No courses yet.</p>";
+    return;
+  }
+  adminCourseList.innerHTML = courses
+    .map(
+      (course) => `
+      <div class="page-panel">
+        <strong>${course.title}</strong>
+        <p class="helper-text">${course.description}</p>
+        <div class="card-meta">
+          <span>${course.category || "General"}</span>
+          <span>${course.level}</span>
+          <span>${course.durationWeeks} weeks</span>
+          <span>$${course.price || 0}</span>
+        </div>
+        <div class="detail-actions">
+          <button class="secondary-button admin-edit" data-id="${course._id}">Edit</button>
+          <button class="ghost-button admin-delete" data-id="${course._id}">Delete</button>
+        </div>
+      </div>
+    `
+    )
+    .join("");
+};
+
+const loadAdminDashboard = async () => {
+  if (!adminCourseList || !adminCourseForm) return;
+  const token = getToken();
+  if (!token) {
+    if (adminMessage) {
+      adminMessage.textContent = "Log in to manage your courses.";
+    }
+    return;
+  }
+
+  const loadCourses = async () => {
+    try {
+      const response = await fetch(`${API_BASE}/api/courses`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        if (adminMessage) adminMessage.textContent = "Unable to load courses.";
+        return;
+      }
+      renderAdminCourses(data);
+      adminCourseList.querySelectorAll(".admin-edit").forEach((button) => {
+        button.addEventListener("click", () => {
+          const course = data.find((item) => item._id === button.dataset.id);
+          if (!course) return;
+          adminCourseForm.dataset.courseId = course._id;
+          adminCourseForm.title.value = course.title || "";
+          adminCourseForm.description.value = course.description || "";
+          adminCourseForm.category.value = course.category || "";
+          adminCourseForm.price.value = course.price || "";
+          adminCourseForm.level.value = course.level || "beginner";
+          adminCourseForm.durationWeeks.value = course.durationWeeks || "";
+          adminCourseForm.imageUrl.value = course.imageUrl || "";
+          adminCourseForm.instructorName.value = course.instructorName || "";
+          adminCourseForm.rating.value = course.rating || "";
+          adminCourseForm.reviewCount.value = course.reviewCount || "";
+          adminCourseForm.videoQuery.value = course.videoQuery || "";
+          adminCourseForm.outcomes.value = (course.outcomes || []).join(", ");
+          adminCourseForm.syllabus.value = (course.syllabus || []).join(", ");
+          if (adminSubmit) adminSubmit.textContent = "Update course";
+        });
+      });
+      adminCourseList.querySelectorAll(".admin-delete").forEach((button) => {
+        button.addEventListener("click", async () => {
+          const confirmed = window.confirm("Delete this course?");
+          if (!confirmed) return;
+          await fetch(`${API_BASE}/api/courses/${button.dataset.id}`, {
+            method: "DELETE",
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          loadCourses();
+        });
+      });
+    } catch (err) {
+      if (adminMessage) adminMessage.textContent = "Network error loading courses.";
+    }
+  };
+
+  await loadCourses();
+
+  adminCourseForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const payload = Object.fromEntries(new FormData(adminCourseForm).entries());
+    payload.price = payload.price ? Number(payload.price) : 0;
+    payload.durationWeeks = payload.durationWeeks ? Number(payload.durationWeeks) : 4;
+    payload.rating = payload.rating ? Number(payload.rating) : 0;
+    payload.reviewCount = payload.reviewCount ? Number(payload.reviewCount) : 0;
+    payload.outcomes = payload.outcomes
+      ? payload.outcomes.split(",").map((item) => item.trim()).filter(Boolean)
+      : [];
+    payload.syllabus = payload.syllabus
+      ? payload.syllabus.split(",").map((item) => item.trim()).filter(Boolean)
+      : [];
+
+    const courseId = adminCourseForm.dataset.courseId;
+    const url = courseId ? `${API_BASE}/api/courses/${courseId}` : `${API_BASE}/api/courses`;
+    const method = courseId ? "PUT" : "POST";
+    try {
+      const response = await fetch(url, {
+        method,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(payload),
+      });
+      if (!response.ok) {
+        if (adminMessage) adminMessage.textContent = "Unable to save course.";
+        return;
+      }
+      if (adminMessage) adminMessage.textContent = "Course saved.";
+      adminCourseForm.reset();
+      delete adminCourseForm.dataset.courseId;
+      if (adminSubmit) adminSubmit.textContent = "Save course";
+      loadCourses();
+    } catch (err) {
+      if (adminMessage) adminMessage.textContent = "Network error saving course.";
+    }
+  });
+
+  if (adminReset) {
+    adminReset.addEventListener("click", () => {
+      adminCourseForm.reset();
+      delete adminCourseForm.dataset.courseId;
+      if (adminSubmit) adminSubmit.textContent = "Save course";
+    });
+  }
+};
+
 loadProfile();
 loadEnrollments();
 loadMyCourses();
@@ -1186,3 +1554,6 @@ loadLearning();
 syncAuthLinks();
 attachQuickViewHandlers();
 loadCategoryHighlights();
+loadCheckout();
+loadCertificate();
+loadAdminDashboard();
