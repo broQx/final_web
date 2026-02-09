@@ -21,6 +21,7 @@ const TOKEN_KEY = "learnify_token";
 const USER_EMAIL_KEY = "learnify_user_email";
 const USER_NAME_KEY = "learnify_user_name";
 const ADMIN_EMAIL = "admin@gmail.com";
+const PHOTO_LIBRARY = window.PHOTO_LIBRARY || {};
 
 const setToken = (token) => localStorage.setItem(TOKEN_KEY, token);
 const setUserInfo = (data) => {
@@ -160,6 +161,13 @@ const loginLink = document.querySelector("#login-link");
 const registerLink = document.querySelector("#register-link");
 const logoutLink = document.querySelector("#logout-link");
 const adminLinks = document.querySelectorAll('a[href="admin.html"]');
+const trustedLogos = document.querySelector("#trusted-logos");
+const topCoursesGrid = document.querySelector("#top-courses-grid");
+const topInstructorsTrack = document.querySelector("#top-instructors-track");
+const instructorsGrid = document.querySelector("#instructors-grid");
+const storiesGrid = document.querySelector("#stories-grid");
+const roadmapGrid = document.querySelector("#roadmap-grid");
+const studentTestimonials = document.querySelector("#student-testimonials");
 adminLinks.forEach((link) => link.classList.add("hidden"));
 
 const isAdminEmail = (email) =>
@@ -707,6 +715,198 @@ const renderCatalog = (courses) => {
     .join("");
 
   attachQuickViewHandlers();
+};
+
+const renderTrustedLogos = () => {
+  if (!trustedLogos) return;
+  const logos = PHOTO_LIBRARY.trustedLogos || [];
+  if (!logos.length) return;
+  trustedLogos.innerHTML = logos
+    .map(
+      (logo) =>
+        `<img src="${logo.url}" alt="${logo.name} logo" title="${logo.name}" />`
+    )
+    .join("");
+};
+
+const renderTopInstructors = () => {
+  if (!topInstructorsTrack) return;
+  const instructors = PHOTO_LIBRARY.instructors || [];
+  if (!instructors.length) return;
+  topInstructorsTrack.innerHTML = instructors
+    .map(
+      (instructor) => `
+      <article class="testimonial-card">
+        <img src="${instructor.image}" alt="${instructor.name}" class="avatar" loading="lazy" />
+        <div>
+          <h3>${instructor.name}</h3>
+          <p>${instructor.role} - ${instructor.company}</p>
+          <span class="helper-text">Specialty: ${instructor.specialty}</span>
+        </div>
+      </article>
+    `
+    )
+    .join("");
+};
+
+const renderInstructorsPage = () => {
+  if (!instructorsGrid) return;
+  const instructors = PHOTO_LIBRARY.instructors || [];
+  if (!instructors.length) {
+    instructorsGrid.innerHTML = "<p class=\"helper-text\">No instructors available.</p>";
+    return;
+  }
+  instructorsGrid.innerHTML = instructors
+    .map(
+      (instructor) => `
+      <article class="course-card">
+        <img src="${instructor.image}" alt="${instructor.name}" loading="lazy" />
+        <h3>${instructor.name}</h3>
+        <p>${instructor.role} - ${instructor.company}</p>
+        <div class="card-meta">Specialty: ${instructor.specialty}</div>
+      </article>
+    `
+    )
+    .join("");
+};
+
+const renderStoriesPage = () => {
+  if (!storiesGrid) return;
+  const learners = PHOTO_LIBRARY.learners || [];
+  if (!learners.length) {
+    storiesGrid.innerHTML = "<p class=\"helper-text\">No stories yet.</p>";
+    return;
+  }
+  storiesGrid.innerHTML = learners
+    .map(
+      (learner) => `
+      <article class="testimonial-card">
+        <img src="${learner.image}" alt="${learner.name}" class="avatar" loading="lazy" />
+        <div>
+          <p>${learner.quote}</p>
+          <strong>${learner.name}</strong>
+          <span>${learner.role}</span>
+        </div>
+      </article>
+    `
+    )
+    .join("");
+};
+
+const renderStudentTestimonials = () => {
+  if (!studentTestimonials) return;
+  const learners = PHOTO_LIBRARY.learners || [];
+  if (!learners.length) {
+    studentTestimonials.innerHTML = "<p class=\"helper-text\">No testimonials yet.</p>";
+    return;
+  }
+  studentTestimonials.innerHTML = learners
+    .slice(0, 3)
+    .map(
+      (learner) => `
+      <article class="testimonial-card">
+        <img src="${learner.image}" alt="${learner.name}" class="avatar" loading="lazy" />
+        <div>
+          <p>${learner.quote}</p>
+          <strong>${learner.name}</strong>
+          <span>${learner.role}</span>
+        </div>
+      </article>
+    `
+    )
+    .join("");
+};
+
+const renderRoadmaps = () => {
+  if (!roadmapGrid) return;
+  const roadmaps = PHOTO_LIBRARY.roadmaps || [];
+  if (!roadmaps.length) {
+    roadmapGrid.innerHTML = "<p class=\"helper-text\">No roadmaps available.</p>";
+    return;
+  }
+  roadmapGrid.innerHTML = roadmaps
+    .map(
+      (roadmap) => `
+      <article class="course-card">
+        <img src="${roadmap.image}" alt="${roadmap.title}" loading="lazy" />
+        <span class="tag">${roadmap.track}</span>
+        <h3>${roadmap.title}</h3>
+        <p>${roadmap.description}</p>
+        <div class="card-meta">
+          <span>${roadmap.duration}</span>
+          <span>${roadmap.level}</span>
+        </div>
+        <a class="secondary-button" href="${roadmap.link}">View roadmap</a>
+      </article>
+    `
+    )
+    .join("");
+};
+
+const renderTopCourses = async () => {
+  if (!topCoursesGrid) return;
+  topCoursesGrid.innerHTML = Array.from({ length: 3 })
+    .map(() => "<div class=\"skeleton-card\"></div>")
+    .join("");
+
+  try {
+    const response = await fetch(`${API_BASE}/api/courses/public?limit=3&sort=recent`);
+    const payload = await response.json();
+    const list = Array.isArray(payload.data) ? payload.data : [];
+    if (!response.ok || !list.length) {
+      throw new Error("No courses");
+    }
+    topCoursesGrid.innerHTML = list
+      .map((course) => {
+        const rating = course.rating ? Number(course.rating).toFixed(1) : "New";
+        const courseLink = course._id
+          ? `course-detail.html?id=${course._id}`
+          : `course-detail.html?title=${encodeURIComponent(course.title)}`;
+        const imageUrl =
+          course.imageUrl ||
+          "https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&h=650&w=940";
+        return `
+          <article class="course-card">
+            <img src="${imageUrl}" alt="${course.title}" loading="lazy" />
+            <span class="tag">${course.category || "General"}</span>
+            <h3>${course.title}</h3>
+            <p>${course.description}</p>
+            <div class="card-meta">
+              <span><i class="ri-star-fill"></i> ${rating}</span>
+              <span>${course.durationWeeks} weeks</span>
+              <span class="price-tag">$${course.price || 0}</span>
+            </div>
+            <a class="secondary-button" href="${courseLink}">View course</a>
+          </article>
+        `;
+      })
+      .join("");
+  } catch (err) {
+    const fallback = PHOTO_LIBRARY.topCoursesFallback || [];
+    if (!fallback.length) {
+      topCoursesGrid.innerHTML = "<p class=\"helper-text\">No courses available.</p>";
+      return;
+    }
+    topCoursesGrid.innerHTML = fallback
+      .map((course) => {
+        const rating = course.rating ? Number(course.rating).toFixed(1) : "New";
+        return `
+          <article class="course-card">
+            <img src="${course.image}" alt="${course.title}" loading="lazy" />
+            <span class="tag">${course.category}</span>
+            <h3>${course.title}</h3>
+            <p>${course.description}</p>
+            <div class="card-meta">
+              <span><i class="ri-star-fill"></i> ${rating}</span>
+              <span>${course.durationWeeks} weeks</span>
+              <span class="price-tag">$${course.price}</span>
+            </div>
+            <a class="secondary-button" href="courses.html">View course</a>
+          </article>
+        `;
+      })
+      .join("");
+  }
 };
 
 const attachQuickViewHandlers = () => {
@@ -1643,3 +1843,10 @@ loadCheckout();
 loadCertificate();
 loadAdminDashboard();
 ensureUserSession();
+renderTrustedLogos();
+renderTopCourses();
+renderTopInstructors();
+renderInstructorsPage();
+renderStoriesPage();
+renderRoadmaps();
+renderStudentTestimonials();
