@@ -35,7 +35,8 @@ const seed = async () => {
     await Course.create([
       {
         title: "Go Developer Roadmap",
-        description: "Build APIs, CLI tools, and cloud services with Go.",
+        description:
+          "Build APIs, CLI tools, and cloud services with Go. Practice concurrency, database integration, and production deployment.",
         category: "Engineering",
         level: "beginner",
         durationWeeks: 8,
@@ -66,7 +67,8 @@ const seed = async () => {
       },
       {
         title: "Node API Basics",
-        description: "Build a REST API with Express and MongoDB.",
+        description:
+          "Build a REST API with Express and MongoDB. Learn routing, data modeling, and authentication fundamentals.",
         category: "Engineering",
         level: "beginner",
         durationWeeks: 4,
@@ -95,7 +97,8 @@ const seed = async () => {
       },
       {
         title: "JWT Auth Mastery",
-        description: "Secure APIs with JWT, roles, and refresh tokens.",
+        description:
+          "Secure APIs with JWT, roles, and refresh tokens. Harden endpoints with middleware and token rotation.",
         category: "Engineering",
         level: "intermediate",
         durationWeeks: 6,
@@ -124,7 +127,8 @@ const seed = async () => {
       },
       {
         title: "Product Strategy Lab",
-        description: "Validate ideas, map GTM, and launch confidently.",
+        description:
+          "Validate ideas, map GTM, and launch confidently. Run experiments, interview users, and plan growth.",
         category: "Product",
         level: "beginner",
         durationWeeks: 5,
@@ -153,7 +157,8 @@ const seed = async () => {
       },
       {
         title: "Design Systems Sprint",
-        description: "Ship a scalable UI kit and align teams fast.",
+        description:
+          "Ship a scalable UI kit and align teams fast. Build tokens, components, and documentation that scale.",
         category: "Design",
         level: "intermediate",
         durationWeeks: 6,
@@ -181,7 +186,8 @@ const seed = async () => {
       },
       {
         title: "Analytics for Growth",
-        description: "Own metrics dashboards and data storytelling.",
+        description:
+          "Own metrics dashboards and data storytelling. Build KPI frameworks and communicate insights clearly.",
         category: "Data",
         level: "beginner",
         durationWeeks: 4,
@@ -209,7 +215,8 @@ const seed = async () => {
       },
       {
         title: "Cloud Deployments with Docker",
-        description: "Ship containers and deploy services with confidence.",
+        description:
+          "Ship containers and deploy services with confidence. Build deployment pipelines and production-ready stacks.",
         category: "Engineering",
         level: "intermediate",
         durationWeeks: 5,
@@ -237,7 +244,8 @@ const seed = async () => {
       },
       {
         title: "Data Visualization Studio",
-        description: "Turn messy data into compelling dashboards.",
+        description:
+          "Turn messy data into compelling dashboards. Learn chart selection, storytelling, and stakeholder reporting.",
         category: "Data",
         level: "intermediate",
         durationWeeks: 5,
@@ -265,7 +273,8 @@ const seed = async () => {
       },
       {
         title: "Marketing Analytics Lab",
-        description: "Measure funnel performance and optimize spend.",
+        description:
+          "Measure funnel performance and optimize spend. Track attribution, build reports, and improve ROI.",
         category: "Marketing",
         level: "beginner",
         durationWeeks: 4,
@@ -293,7 +302,8 @@ const seed = async () => {
       },
       {
         title: "Product Leadership",
-        description: "Lead cross-functional teams with confidence.",
+        description:
+          "Lead cross-functional teams with confidence. Improve roadmapping, stakeholder alignment, and execution.",
         category: "Product",
         level: "advanced",
         durationWeeks: 6,
