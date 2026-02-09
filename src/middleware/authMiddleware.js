@@ -23,4 +23,12 @@ const protect = async (req, res, next) => {
   }
 };
 
-module.exports = { protect };
+const adminOnly = (req, res, next) => {
+  const adminEmail = (process.env.ADMIN_EMAIL || "admin@gmail.com").toLowerCase();
+  if (!req.user || req.user.email.toLowerCase() !== adminEmail) {
+    return res.status(403).json({ message: "Admin access required" });
+  }
+  next();
+};
+
+module.exports = { protect, adminOnly };

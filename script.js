@@ -18,10 +18,29 @@ revealItems.forEach((item) => observer.observe(item));
 
 const API_BASE = "http://localhost:3000";
 const TOKEN_KEY = "learnify_token";
+const USER_EMAIL_KEY = "learnify_user_email";
+const USER_NAME_KEY = "learnify_user_name";
+const ADMIN_EMAIL = "admin@gmail.com";
 
 const setToken = (token) => localStorage.setItem(TOKEN_KEY, token);
+const setUserInfo = (data) => {
+  if (data?.email) {
+    localStorage.setItem(USER_EMAIL_KEY, data.email);
+  }
+  if (data?.username) {
+    localStorage.setItem(USER_NAME_KEY, data.username);
+  }
+};
+const getUserEmail = () => localStorage.getItem(USER_EMAIL_KEY);
+const clearUserInfo = () => {
+  localStorage.removeItem(USER_EMAIL_KEY);
+  localStorage.removeItem(USER_NAME_KEY);
+};
 const getToken = () => localStorage.getItem(TOKEN_KEY);
-const clearToken = () => localStorage.removeItem(TOKEN_KEY);
+const clearToken = () => {
+  localStorage.removeItem(TOKEN_KEY);
+  clearUserInfo();
+};
 let hasProfileInfo = false;
 let hasEnrollments = false;
 
@@ -82,6 +101,7 @@ const handleAuth = async (form, mode, messageEl) => {
       return;
     }
     setToken(data.token);
+    setUserInfo(data);
     if (messageEl) {
       messageEl.textContent = "Success. Redirecting...";
     }
@@ -139,6 +159,18 @@ const profileProgressLabel = document.querySelector("#profile-progress-label");
 const loginLink = document.querySelector("#login-link");
 const registerLink = document.querySelector("#register-link");
 const logoutLink = document.querySelector("#logout-link");
+const adminLinks = document.querySelectorAll('a[href="admin.html"]');
+adminLinks.forEach((link) => link.classList.add("hidden"));
+
+const isAdminEmail = (email) =>
+  email && email.toLowerCase() === ADMIN_EMAIL.toLowerCase();
+
+const setAdminVisibility = (email) => {
+  const show = isAdminEmail(email);
+  adminLinks.forEach((link) => {
+    link.classList.toggle("hidden", !show);
+  });
+};
 
 const syncAuthLinks = () => {
   const token = getToken();
@@ -150,6 +182,33 @@ const syncAuthLinks = () => {
     if (loginLink) loginLink.classList.remove("hidden");
     if (registerLink) registerLink.classList.remove("hidden");
     if (logoutLink) logoutLink.classList.add("hidden");
+  }
+};
+
+const ensureUserSession = async () => {
+  const token = getToken();
+  if (!token) {
+    setAdminVisibility(null);
+    return;
+  }
+
+  const storedEmail = getUserEmail();
+  if (storedEmail) {
+    setAdminVisibility(storedEmail);
+    return;
+  }
+
+  try {
+    const response = await fetch(`${API_BASE}/api/users/profile`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    const data = await response.json();
+    if (response.ok) {
+      setUserInfo(data);
+      setAdminVisibility(data.email);
+    }
+  } catch (err) {
+    setAdminVisibility(null);
   }
 };
 
@@ -1447,6 +1506,32 @@ const loadAdminDashboard = async () => {
     return;
   }
 
+  let adminEmail = getUserEmail();
+  if (!adminEmail) {
+    try {
+      const profileResponse = await fetch(`${API_BASE}/api/users/profile`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const profile = await profileResponse.json();
+      if (profileResponse.ok) {
+        setUserInfo(profile);
+        adminEmail = profile.email;
+      }
+    } catch (err) {
+      adminEmail = null;
+    }
+  }
+
+  if (!isAdminEmail(adminEmail)) {
+    if (adminMessage) {
+      adminMessage.textContent =
+        "Access restricted. Log in with the admin account to use this page.";
+    }
+    if (adminCourseForm) adminCourseForm.classList.add("hidden");
+    if (adminCourseList) adminCourseList.innerHTML = "";
+    return;
+  }
+
   const loadCourses = async () => {
     try {
       const response = await fetch(`${API_BASE}/api/courses`, {
@@ -1557,3 +1642,4 @@ loadCategoryHighlights();
 loadCheckout();
 loadCertificate();
 loadAdminDashboard();
+ensureUserSession();

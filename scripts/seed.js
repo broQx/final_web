@@ -17,12 +17,19 @@ const seed = async () => {
     await User.deleteMany({});
     await Course.deleteMany({});
 
-    const passwordHash = await bcrypt.hash("Password123", 10);
+    const adminPasswordHash = await bcrypt.hash("admin1234", 10);
+    const userPasswordHash = await bcrypt.hash("Password123", 10);
+
+    const adminUser = await User.create({
+      username: "admin",
+      email: "admin@gmail.com",
+      password: adminPasswordHash,
+    });
 
     const user = await User.create({
       username: "student1",
       email: "student1@example.com",
-      password: passwordHash,
+      password: userPasswordHash,
     });
 
     await Course.create([
@@ -55,7 +62,7 @@ const seed = async () => {
           { name: "Hassan Nur", rating: 4, comment: "Helped me ship my first Go service." },
         ],
         videoQuery: "golang backend tutorial",
-        createdBy: user._id,
+        createdBy: adminUser._id,
       },
       {
         title: "Node API Basics",
@@ -84,7 +91,7 @@ const seed = async () => {
           { name: "Maya Patel", rating: 5, comment: "Perfect for API fundamentals." },
         ],
         videoQuery: "nodejs express mongodb api",
-        createdBy: user._id,
+        createdBy: adminUser._id,
       },
       {
         title: "JWT Auth Mastery",
@@ -113,7 +120,7 @@ const seed = async () => {
           { name: "Jordan Lee", rating: 5, comment: "Security explained clearly." },
         ],
         videoQuery: "jwt authentication tutorial",
-        createdBy: user._id,
+        createdBy: adminUser._id,
       },
       {
         title: "Product Strategy Lab",
@@ -142,7 +149,7 @@ const seed = async () => {
           { name: "Selena Grant", rating: 5, comment: "Best product class I have taken." },
         ],
         videoQuery: "product strategy course",
-        createdBy: user._id,
+        createdBy: adminUser._id,
       },
       {
         title: "Design Systems Sprint",
@@ -170,7 +177,7 @@ const seed = async () => {
           { name: "Priya Sharma", rating: 5, comment: "Great system thinking." },
         ],
         videoQuery: "design systems course",
-        createdBy: user._id,
+        createdBy: adminUser._id,
       },
       {
         title: "Analytics for Growth",
@@ -198,7 +205,7 @@ const seed = async () => {
           { name: "Hassan Nur", rating: 4, comment: "Good fundamentals." },
         ],
         videoQuery: "data analytics dashboard tutorial",
-        createdBy: user._id,
+        createdBy: adminUser._id,
       },
       {
         title: "Cloud Deployments with Docker",
@@ -226,7 +233,7 @@ const seed = async () => {
           { name: "Jordan Lee", rating: 4, comment: "Practical and clear." },
         ],
         videoQuery: "docker deployment tutorial",
-        createdBy: user._id,
+        createdBy: adminUser._id,
       },
       {
         title: "Data Visualization Studio",
@@ -254,7 +261,7 @@ const seed = async () => {
           { name: "Priya Sharma", rating: 5, comment: "Loved the dashboards." },
         ],
         videoQuery: "data visualization course",
-        createdBy: user._id,
+        createdBy: adminUser._id,
       },
       {
         title: "Marketing Analytics Lab",
@@ -282,7 +289,7 @@ const seed = async () => {
           { name: "Selena Grant", rating: 4, comment: "Clear and easy." },
         ],
         videoQuery: "marketing analytics tutorial",
-        createdBy: user._id,
+        createdBy: adminUser._id,
       },
       {
         title: "Product Leadership",

@@ -9,7 +9,11 @@
     "seed": "node scripts/seed.js",
     "test": "jest"
   },
-  "keywords": ["express", "mongodb", "backend"],
+  "keywords": [
+    "express",
+    "mongodb",
+    "backend"
+  ],
   "author": "",
   "license": "MIT",
   "dependencies": {
@@ -19,6 +23,7 @@
     "express": "^4.19.2",
     "joi": "^17.13.3",
     "jsonwebtoken": "^9.0.2",
+    "mongodb": "^7.1.0",
     "mongoose": "^8.9.1",
     "node-fetch": "^2.6.12"
   },

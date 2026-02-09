@@ -8,16 +8,16 @@ const {
   getPublicCourses,
   getPublicCourseById,
 } = require("../controllers/courseController");
-const { protect } = require("../middleware/authMiddleware");
+const { protect, adminOnly } = require("../middleware/authMiddleware");
 
 const router = express.Router();
 
 router.get("/public", getPublicCourses);
 router.get("/public/:id", getPublicCourseById);
-router.post("/", protect, createCourse);
-router.get("/", protect, getCourses);
-router.get("/:id", protect, getCourseById);
-router.put("/:id", protect, updateCourse);
-router.delete("/:id", protect, deleteCourse);
+router.post("/", protect, adminOnly, createCourse);
+router.get("/", protect, adminOnly, getCourses);
+router.get("/:id", protect, adminOnly, getCourseById);
+router.put("/:id", protect, adminOnly, updateCourse);
+router.delete("/:id", protect, adminOnly, deleteCourse);
 
 module.exports = router;
